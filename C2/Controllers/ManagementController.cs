@@ -7,7 +7,7 @@ using System.Collections.Concurrent;
 namespace C2.Controllers;
 
 [ApiController]
-[EnableCors("AllowCors")]
+[DisableCors]
 [Route("[controller]")]
 public class ManagementController : AbstractController
 {

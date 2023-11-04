@@ -20,6 +20,8 @@ internal class Program
             _ = app.UseSwaggerUI();
         }
 
+        _ = app.UseCors();
+
         _ = app.UseHttpsRedirection();
 
         _ = app.UseAuthorization();
