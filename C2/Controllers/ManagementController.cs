@@ -1,11 +1,13 @@
 using C2.Models;
 using C2.POCOs;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Concurrent;
 
 namespace C2.Controllers;
 
 [ApiController]
+[EnableCors("AllowCors")]
 [Route("[controller]")]
 public class ManagementController : AbstractController
 {
