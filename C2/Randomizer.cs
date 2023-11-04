@@ -2,7 +2,7 @@
 
 namespace C2;
 
-public static class RandomNameGenerator
+public static class Randomizer
 {
     public static Random Random = new Random();
 
@@ -318,12 +318,17 @@ public static class RandomNameGenerator
         "nation"
     };
 
-    public static string GenerateNew()
+    public static string GenerateName()
     {
         string adverb = Adverbs[Random.Next(Adverbs.Count)];
         string adjective = Adjectives[Random.Next(Adjectives.Count)];
         string noun = Nouns[Random.Next(Nouns.Count)];
 
         return $"{adverb}-{adjective}-{noun}";
+    }
+
+    public static int GenerateInt()
+    {
+        return Random.Next();
     }
 }
