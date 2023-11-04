@@ -8,8 +8,5 @@ public class ManagementController : AbstractController
 {
     [HttpGet("ManagementTest")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> ManagementTest()
-    {
-        return Ok();
-    }
+    public IActionResult ManagementTest() => Ok();
 }
