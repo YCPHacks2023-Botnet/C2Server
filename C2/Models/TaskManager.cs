@@ -9,6 +9,18 @@ public class TaskManager
     public ConcurrentDictionary<int, BotTask> Executing = new();
     public ConcurrentBag<BotTask> Completed = new();
 
+    public BotTask? GetTask(int taskId)
+    {
+        if (Executing.TryGetValue(taskId, out BotTask task))
+        {
+            if (task != null)
+            {
+                return task;
+            }
+        }
+
+        return null;
+    }
     public void QueueBotTask(TaskEnum task, Dictionary<string, object> parameters)
     {
         var botTask = new BotTask()

