@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
     server:
+        image: robwoodd/bot-net-c2
         container_name: bot-net-c2
         build:
             context: .
