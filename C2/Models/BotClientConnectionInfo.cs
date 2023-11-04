@@ -2,7 +2,7 @@
 
 public class BotClientConnectionInfo
 {
-    public string Ip { get; set; }
+    public required string Ip { get; set; }
 
     public DateTime LastHeardFrom { get; set; }
 }

@@ -1,7 +1,8 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace C2.Enums;
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum ProgressEnum
 {
     SUCCESS,

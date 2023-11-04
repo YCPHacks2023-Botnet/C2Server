@@ -1,4 +1,5 @@
 using C2.Models;
+using C2.POCOs;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Concurrent;
 
@@ -10,11 +11,11 @@ public class ManagementController : AbstractController
 {
     [HttpGet("ManagementTest")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> ManagementTest() => Ok();
+    public IActionResult ManagementTest() => Ok();
 
     [HttpPost("QueueTask")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> QueueTask([FromBody] AddedBotTask task)
+    public IActionResult QueueTask([FromBody] AddedBotTask task)
     {
         C2State.TaskManager.QueueBotTask(task.Task, task.TaskParameters);
         return Ok();
@@ -22,37 +23,18 @@ public class ManagementController : AbstractController
 
     [HttpGet("GetBotManager")]
     [ProducesResponseType(typeof(BotManager), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetBotManager()
-    {
-        return Ok(C2State.BotManager.Bots);
-    }
+    public IActionResult GetBotManager() => Ok(C2State.BotManager.Bots);
 
     [HttpGet("GetWaitingTasks")]
     [ProducesResponseType(typeof(ConcurrentQueue<BotTask>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetWaitingTasks()
-    {
-        return Ok(C2State.TaskManager.Waiting);
-    }
-
-    [HttpGet("GetDispatchedTasks")]
-    [ProducesResponseType(typeof(ConcurrentDictionary<int, BotTask>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetDispatchedTasks()
-    {
-        return Ok(C2State.TaskManager.Dispatched);
-    }
+    public IActionResult GetWaitingTasks() => Ok(C2State.TaskManager.Waiting);
 
     [HttpGet("GetExecutingTasks")]
     [ProducesResponseType(typeof(ConcurrentDictionary<int, BotTask>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetExecutingTasks()
-    {
-        return Ok(C2State.TaskManager.Executing);
-    }
+    public IActionResult GetExecutingTasks() => Ok(C2State.TaskManager.Executing);
 
     [HttpGet("GetCompletedTasks")]
     [ProducesResponseType(typeof(ConcurrentBag<BotTask>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetCompletedTasks()
-    {
-        return Ok(C2State.TaskManager.Completed);
-    }
+    public IActionResult GetCompletedTasks() => Ok(C2State.TaskManager.Completed);
 
 }

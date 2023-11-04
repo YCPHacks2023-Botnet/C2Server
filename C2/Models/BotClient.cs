@@ -3,8 +3,8 @@
 public class BotClient
 {
     public int Id { get; set; }
-    public string Name { get; set; }
+    public required string Name { get; set; }
     public int TaskId { get; set; }
-    public BotClientConnectionInfo ConnectionInfo { get; set; }
-    public BotClientSpecs BotClientSpecs { get; set; }
+    public required BotClientConnectionInfo ConnectionInfo { get; set; }
+    public required BotClientSpecs BotClientSpecs { get; set; }
 }

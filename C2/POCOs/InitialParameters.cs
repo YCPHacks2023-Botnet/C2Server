@@ -2,7 +2,7 @@
 
 public class InitialParameters
 {
-    public string CPU { get; set; }
+    public required string CPU { get; set; }
     public int Ram { get; set; }
-    public string Ip { get; set; }
+    public required string Ip { get; set; }
 }

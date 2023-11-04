@@ -4,5 +4,5 @@ public class BotClientSpecs
 {
     public int Ram { get; set; }
 
-    public string CPU { get; set; }
+    public required string CPU { get; set; }
 }

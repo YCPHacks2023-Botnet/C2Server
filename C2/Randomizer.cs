@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace C2;
+﻿namespace C2;
 
 public static class Randomizer
 {
-    public static Random Random = new Random();
+    public static Random Random = new();
 
     public static readonly List<string> Adverbs = new()
     {
@@ -327,8 +325,5 @@ public static class Randomizer
         return $"{adverb}-{adjective}-{noun}";
     }
 
-    public static int GenerateInt()
-    {
-        return Random.Next();
-    }
+    public static int GenerateInt() => Random.Next();
 }
