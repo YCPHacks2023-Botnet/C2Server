@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+    server:
+        container_name: bot-net-c2
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "8080:80"
+        networks:
+            - web-network
+
+networks:
+  web-network:
