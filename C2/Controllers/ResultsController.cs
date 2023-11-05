@@ -22,7 +22,7 @@ public class ResultsController : AbstractController
 
         bot.Output.AddRange(output.Output);
 
-        int remove = 500 - bot.Output.Count;
+        int remove = 200 - bot.Output.Count;
         if (remove > 0)
         {
             bot.Output.RemoveRange(0, remove);

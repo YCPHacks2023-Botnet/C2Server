@@ -61,7 +61,12 @@ public class ZombieController : AbstractController
     [ProducesResponseType(typeof(ActionPoco), StatusCodes.Status200OK)]
     public IActionResult Beacon([FromQuery] int bot_id, [FromQuery] int task_id, [FromQuery] ProgressEnum progress)
     {
-        BotClient bot = GetBot(bot_id);
+        BotClient? bot = GetBot(bot_id);
+
+        if (bot == null)
+        {
+            return Ok(new ActionPoco() { Action = ActionEnum.REGISTER });
+        }
 
         bot.CurrentProgress = progress;
 

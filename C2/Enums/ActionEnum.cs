@@ -7,5 +7,6 @@ public enum ActionEnum
 {
     REQUEST,
     CONTINUE,
-    STOP
+    STOP,
+    REGISTER
 }
