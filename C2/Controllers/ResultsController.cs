@@ -20,13 +20,21 @@ public class ResultsController : AbstractController
 
         bot.ConnectionInfo.LastHeardFrom = DateTime.UtcNow;
 
-        bot.Output.AddRange(output.Output);
-
-        int remove = 200 - bot.Output.Count;
-        if (remove > 0)
+        if (bot.OutputRetrieved) // Safely current overwrite oputput items
         {
-            bot.Output.RemoveRange(0, remove);
+            bot.Output = output.Output.ToList();
         }
+        else { // Append console items
+            bot.Output.AddRange(output.Output);
+
+            int remove = 200 - bot.Output.Count;
+            if (remove > 0)
+            {
+                bot.Output.RemoveRange(0, remove);
+            }
+        }
+
+        bot.OutputRetrieved = false;
 
         return Ok();
     }
