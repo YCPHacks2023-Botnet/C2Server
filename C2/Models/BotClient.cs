@@ -13,4 +13,5 @@ public class BotClient
     public List<string> Output { get; set; } = new List<string>();
     public required BotClientConnectionInfo ConnectionInfo { get; set; }
     public required BotClientSpecs BotClientSpecs { get; set; }
+    public List<BotTask> CompletedTasks { get; set; } = new List<BotTask>();
 }

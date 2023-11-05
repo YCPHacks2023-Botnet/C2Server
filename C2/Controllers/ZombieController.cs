@@ -87,6 +87,13 @@ public class ZombieController : AbstractController
         }
         else if (progress is ProgressEnum.FAILURE or ProgressEnum.SUCCESS) // Valid task completed - move it from executing to completed
         {
+            if (C2State.TaskManager.Executing.TryGetValue(task_id, out BotTask botTask))
+            {
+                if (botTask != null)
+                {
+                    bot.CompletedTasks.Add(botTask);
+                }
+            }
             _ = C2State.TaskManager.CompleteTask(task_id);
             return Ok(new ActionPoco() { Action = ActionEnum.REQUEST });
         }

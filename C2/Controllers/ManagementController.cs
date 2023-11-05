@@ -43,11 +43,13 @@ public class ManagementController : AbstractController
     {
         BotClient bot = GetBot(bot_id);
 
-        return Ok(new BotInfoPoco()
+        var BotInfo = new BotInfoPoco()
         {
             Bot = bot,
             Task = C2State.TaskManager.GetTask(bot.TaskId)
-        });
+        };
+
+        return Ok(BotInfo);
     }
 
     [HttpGet("GetBotManager")]
