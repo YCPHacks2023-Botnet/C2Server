@@ -7,5 +7,13 @@ namespace C2.Controllers;
 public abstract class AbstractController : ControllerBase
 {
     [NonAction]
-    public static BotClient GetBot(int id) => C2State.BotManager.Bots[id];
+    public static BotClient? GetBot(int id)
+    {
+        if (C2State.BotManager.Bots.TryGetValue(id, out BotClient bot))
+        {
+            return bot;
+        }
+
+        return null;
+    }
 }
