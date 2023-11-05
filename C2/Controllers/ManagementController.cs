@@ -54,6 +54,19 @@ public class ManagementController : AbstractController
     [ProducesResponseType(typeof(BotManager), StatusCodes.Status200OK)]
     public IActionResult GetBotManager() => Ok(C2State.BotManager.Bots);
 
+    [HttpGet("GetBots")]
+    [ProducesResponseType(typeof(StrippedBotList), StatusCodes.Status200OK)]
+    public IActionResult GetBots()
+    {
+        var bots = new StrippedBotList();
+        foreach (var bot in C2State.BotManager.Bots.Values)
+        {
+            bots.Bots.Add(new StrippedBot() { Id = bot.Id, Name = bot.Name });
+        }
+
+        return Ok(bots);
+    }
+
     [HttpGet("GetWaitingTasks")]
     [ProducesResponseType(typeof(ConcurrentQueue<BotTask>), StatusCodes.Status200OK)]
     public IActionResult GetWaitingTasks() => Ok(C2State.TaskManager.Waiting);
