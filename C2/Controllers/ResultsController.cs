@@ -19,7 +19,14 @@ public class ResultsController : AbstractController
         BotClient bot = GetBot(bot_id);
 
         bot.ConnectionInfo.LastHeardFrom = DateTime.UtcNow;
+
         bot.Output.AddRange(output.Output);
+
+        int remove = 500 - bot.Output.Count;
+        if (remove > 0)
+        {
+            bot.Output.RemoveRange(0, remove);
+        }
 
         return Ok();
     }
