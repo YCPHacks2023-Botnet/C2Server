@@ -11,6 +11,12 @@ internal class Program
         _ = builder.Services.AddEndpointsApiExplorer();
         _ = builder.Services.AddSwaggerGen();
 
+        _ = builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll",
+                builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+        });
+
         WebApplication app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -20,7 +26,7 @@ internal class Program
             _ = app.UseSwaggerUI();
         }
 
-        _ = app.UseCors();
+        _ = app.UseCors("AllowAll");
 
         _ = app.UseHttpsRedirection();
 
