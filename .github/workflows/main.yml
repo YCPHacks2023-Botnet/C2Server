@@ -69,7 +69,7 @@ jobs:
     steps:
     - name: Check Endpoint
       run: |
-        response=$(curl -s -o /dev/null -w "%{http_code}" http://45.55.70.104:8080/Management/ManagementTest)
+        response=$(curl -s -o /dev/null -w "%{http_code}" http://45.55.105.65:8080/Management/ManagementTest)
         if [ "$response" == "200" ]; then
           echo "Endpoint returned 200 OK"
           exit 0
