@@ -1,3 +1,7 @@
+using C2;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+
 internal class Program
 {
     private static void Main(string[] args)
@@ -15,6 +19,20 @@ internal class Program
         {
             options.AddPolicy("AllowAll",
                 builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+        });
+
+        _ = builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateIssuerSigningKey = true,
+                ValidateLifetime = true,
+                IssuerSigningKey = C2State.SecurityHandler.AuthorizationSigningTokenKey,
+                ClockSkew = TimeSpan.FromMinutes(5)
+            };
         });
 
         WebApplication app = builder.Build();
