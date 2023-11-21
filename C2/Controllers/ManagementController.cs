@@ -19,8 +19,7 @@ public class ManagementController : AbstractController
             ? Ok(UserManager.GenerateAuthorizationToken(userId.Username))
             : Unauthorized();
     }
-
-    [Authorize]
+    
     [HttpGet("ManagementTest")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public IActionResult ManagementTest() => Ok();
