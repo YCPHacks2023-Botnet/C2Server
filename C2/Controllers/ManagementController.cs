@@ -11,7 +11,7 @@ namespace C2.Controllers;
 [Route("[controller]")]
 public class ManagementController : AbstractController
 {
-    [HttpPost]
+    [HttpPost("Login")]
     [ProducesResponseType(typeof(string), 200)]
     public IActionResult Login([FromBody] UserId userId)
     {
