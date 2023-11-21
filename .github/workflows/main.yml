@@ -22,7 +22,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: build-artifacts
-        path: ./C2/bin/Debug/net7.0/
+        path: ./C2/bin/Debug/net8.0/
     - name: Test
       run: dotnet test --no-build --verbosity normal
       
