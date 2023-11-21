@@ -81,7 +81,7 @@ public class ManagementController : AbstractController
         var bots = new StrippedBotList();
         foreach (var bot in C2State.BotManager.Bots.Values)
         {
-            bots.Bots.Add(new StrippedBot() { Id = bot.Id, Name = bot.Name });
+            bots.Bots.Add(new StrippedBot() { Id = bot.Id, Name = bot.Name, Longitude = bot.locationInfo?.Longitude, Latitude = bot.locationInfo?.Latitude });
         }
 
         return Ok(bots);
