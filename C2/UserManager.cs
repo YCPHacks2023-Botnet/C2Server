@@ -37,7 +37,7 @@ public static class UserManager
         {
             Subject = new ClaimsIdentity(claims),
 
-            Expires = DateTime.UtcNow.Add(new TimeSpan(0, 5, 0)), // Token expiration time
+            Expires = DateTime.UtcNow.Add(new TimeSpan(2, 0, 0)), // Token expiration time
 
             SigningCredentials = C2State.SecurityHandler.AuthorizationSigningCredentials
         };
