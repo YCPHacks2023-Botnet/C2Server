@@ -2,6 +2,6 @@
 
 public class UserId
 {
-    public required string Username;
-    public required string Password;
+    public string Username { get; set; }
+    public string Password { get; set; }
 }
