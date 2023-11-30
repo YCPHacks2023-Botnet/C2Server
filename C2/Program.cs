@@ -18,7 +18,7 @@ internal class Program
         _ = builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowAll",
-                builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+                builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());
         });
 
         _ = builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
