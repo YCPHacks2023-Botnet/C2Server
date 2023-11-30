@@ -17,8 +17,9 @@ internal class Program
         
         _ = builder.Services.AddCors(options =>
         {
-            options.AddPolicy("AllowAll",
-                builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            options.AddPolicy("AllowAllOrigins",
+                builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials()
+                .WithOrigins("http://localhost:8081", "http://165.227.86.164:8081"));
         });
 
         _ = builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -46,7 +47,7 @@ internal class Program
 
         _ = app.UseHttpsRedirection();
 
-        _ = app.UseCors("AllowAll");
+        _ = app.UseCors("AllowAllOrigins");
 
         _ = app.UseAuthorization();
 
